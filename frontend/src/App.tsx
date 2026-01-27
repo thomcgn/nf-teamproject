@@ -1,6 +1,6 @@
 import "./styles/index.scss";
 import {Route, Routes} from "react-router-dom";
-import {APP_ROUTES} from "./system/router/contstans.ts";
+import {APP_ROUTES} from "./system/router/constants.ts";
 import NotFound from "./pages/NotFound";
 
 function App() {
