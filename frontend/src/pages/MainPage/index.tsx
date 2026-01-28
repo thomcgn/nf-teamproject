@@ -1,4 +1,3 @@
-import FlyingIngredients from "../../components/atoms/FlyingIngredients";
 import {useNavigate} from "react-router-dom";
 import {APP_ROUTES} from "../../system/router/constants.ts";
 
@@ -11,7 +10,6 @@ export default function MainPage() {
 
     return (
         <main className="main">
-            <FlyingIngredients />
             <div className="main__card">
                 <h1 className="main__app-name">Kitchenly</h1>
 
