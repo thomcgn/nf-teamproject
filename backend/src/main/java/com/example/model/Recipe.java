@@ -12,7 +12,7 @@ public class Recipe {
     private String name;
     private String instructions;
     private String image;
-    private Integer timeMinutes
+    private Integer timeMinutes;
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     public boolean containsAnimalProducts() {

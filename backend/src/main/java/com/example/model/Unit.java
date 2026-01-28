@@ -16,7 +16,7 @@ public enum Unit {
     CLOVE("clove"),
 
     TO_TASTE("to taste"),
-    AS_NEEDED("as needed"),
+    AS_NEEDED("as needed");
 
     private final String display;
 
