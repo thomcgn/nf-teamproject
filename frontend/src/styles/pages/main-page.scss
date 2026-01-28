@@ -22,8 +22,19 @@
   animation: fadeInUp 1s ease forwards;
 }
 
+.main__app-name {
+  font-size: 4rem;
+  font-weight: 900;
+  background: $gradient-main;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeInUp 1s ease forwards;
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+}
+
 .main__title {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 800;
   background: $gradient-main;
   -webkit-background-clip: text;

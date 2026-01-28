@@ -13,6 +13,8 @@ export default function MainPage() {
         <main className="main">
             <FlyingIngredients />
             <div className="main__card">
+                <h1 className="main__app-name">Kitchenly</h1>
+
                 <h1 className="main__title">
                     Cook smarter.<br />Eat better.
                 </h1>
