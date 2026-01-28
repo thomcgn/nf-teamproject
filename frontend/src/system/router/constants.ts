@@ -1,3 +1,6 @@
 export const APP_ROUTES = {
-    index: "/"
+    index: "/",
+    receipts: {
+        index: "/receipts"
+    }
 }

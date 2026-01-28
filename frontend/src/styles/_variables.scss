@@ -1,0 +1,25 @@
+$primary: #ff9f63;
+$secondary: #ff6f3c;
+$accent: #ffd166;
+
+$bg-dark: #1a120b;
+$bg-light: #2a1f16;
+
+$text-main: #fff6ed;
+$text-muted: #e0b089;
+
+$gradient-main: linear-gradient(135deg, $primary, $secondary);
+$gradient-bg: radial-gradient(circle at top, #3a2416, $bg-dark);
+
+$font-main: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+$radius-lg: 24px;
+$radius-md: 14px;
+
+$transition-fast: 0.2s ease;
+$transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+$orange-shadow-color: rgba(255, 159, 99, 0.45);
+
+$shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.45);
+$shadow-glow: 0 0 50px $orange-shadow-color;
