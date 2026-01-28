@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.backend.model;
 import lombok.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,8 +14,4 @@ public class Recipe {
     private String image;
     private Integer timeMinutes;
     private List<RecipeIngredient> ingredients = new ArrayList<>();
-
-    public boolean containsAnimalProducts() {
-        return ingredients.stream().anyMatch(RecipeIngredient::isAnimal);
-    }
 }

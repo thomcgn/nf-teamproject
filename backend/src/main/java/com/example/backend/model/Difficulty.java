@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.backend.model;
 
 public enum Difficulty  {
     EASY, MEDIUM, HARD

@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.backend.model;
 
 public class RecipeIngredient {
     private String ingredientId;
