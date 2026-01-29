@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/recipe")
 public class RecipeController {
 
     private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) {this.recipeService = recipeService;}
 
-    @GetMapping("/recipe")
+    @GetMapping
     public List<RecipeResponse> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
-    @GetMapping("/recipe/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<RecipeResponse> getRecipeById(@PathVariable String id) {
         return recipeService.getRecipeById(id)
                 .map(ResponseEntity::ok)
