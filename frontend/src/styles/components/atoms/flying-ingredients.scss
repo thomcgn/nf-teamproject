@@ -1,0 +1,25 @@
+.ingredient {
+  position: absolute;
+  font-size: 7rem;
+  opacity: 0.35;
+  animation: floatIngredient linear infinite;
+}
+
+.ingredient--0 { top: 10%; left: 15%; animation-duration: 18s; }
+.ingredient--1 { top: 12%; right: 20%; animation-duration: 22s; }
+.ingredient--2 { bottom: 5%; left: 25%; animation-duration: 20s; }
+.ingredient--3 { bottom: 6%; right: 20%; animation-duration: 26s; }
+.ingredient--4 { top: 50%; left: 5%; animation-duration: 30s; }
+.ingredient--5 { top: 60%; right: 8%; animation-duration: 28s; }
+
+@keyframes floatIngredient {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
+}
