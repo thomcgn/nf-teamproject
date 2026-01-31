@@ -6,6 +6,7 @@ import MainPage from "./pages/MainPage";
 import MainLayout from "./components/organisms/MainLayout";
 import AboutPage from "./pages/AboutPage";
 import {ToastProvider} from "./components/organisms/Toast/context.tsx";
+import CreateRecipePage from "./pages/CreateReceiptePage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
               <Routes>
                   <Route path={APP_ROUTES.index} element={<MainPage/>}/>
 
+                  <Route path={APP_ROUTES.receipts.create} element={<CreateRecipePage/>}/>
                   <Route path={APP_ROUTES.about.index} element={<AboutPage/>}/>
                   {/* MUST be last */}
                   <Route path="*" element={<NotFound />} />

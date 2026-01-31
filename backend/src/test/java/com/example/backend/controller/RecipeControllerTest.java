@@ -2,22 +2,25 @@ package com.example.backend.controller;
 
 
 import com.example.backend.dto.RecipeResponse;
+import com.example.backend.exceptions.DuplicateItemException;
 import com.example.backend.model.RecipeIngredient;
 import com.example.backend.model.Unit;
 import com.example.backend.services.RecipeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RecipeController.class)
@@ -26,7 +29,7 @@ class RecipeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private RecipeService recipeService;
 
     @Test
@@ -42,7 +45,7 @@ class RecipeControllerTest {
                 List.of(ingredient)
         );
 
-        Mockito.when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
+        when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
 
         mockMvc.perform(get("/api/recipe"))
                 .andExpect(status().isOk())
@@ -64,7 +67,7 @@ class RecipeControllerTest {
                 List.of()
         );
 
-        Mockito.when(recipeService.getRecipeById("1")).thenReturn(Optional.of(recipe));
+        when(recipeService.getRecipeById("1")).thenReturn(Optional.of(recipe));
 
         mockMvc.perform(get("/api/recipe/1"))
                 .andExpect(status().isOk())
@@ -75,9 +78,80 @@ class RecipeControllerTest {
 
     @Test
     void getRecipeById_shouldReturn404_whenNotFound() throws Exception {
-        Mockito.when(recipeService.getRecipeById("42")).thenReturn(Optional.empty());
+        when(recipeService.getRecipeById("42")).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/recipe/42"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void addRecipe_shouldReturnCreatedRecipe() throws Exception {
+        RecipeIngredient ingredient = new RecipeIngredient("1", "Tomate", 5, Unit.PIECE, false);
+        RecipeResponse recipe = new RecipeResponse(
+                "1",
+                "Pasta",
+                "Kochen, essen",
+                "image.jpg",
+                20,
+                List.of(ingredient)
+        );
+
+        when(recipeService.addRecipe(Mockito.any())).thenReturn(recipe);
+
+        mockMvc.perform(post("/api/recipe")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("""
+                                {
+                                    "name": "Pasta",
+                                    "instructions": "Kochen, essen",
+                                    "image": "image.jpg",
+                                    "timeMinutes": 20,
+                                    "ingredients": [
+                                        {
+                                            "ingredientId":"1",
+                                            "name":"Tomate",
+                                            "quantity":5,
+                                            "unit":"PIECE",
+                                            "isAnimal":false
+                                        }
+                                     ]
+                                }
+                            """)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.name").value("Pasta"))
+                .andExpect(jsonPath("$.image").value("image.jpg"))
+                .andExpect(jsonPath("$.timeMinutes").value(20))
+                .andExpect(jsonPath("$.ingredients[0].name").value("Tomate"));
+    }
+
+    @Test
+    void addRecipe_shouldReturn409_whenDuplicate() throws Exception {
+       when(recipeService.addRecipe(Mockito.any()))
+                .thenThrow(new DuplicateItemException("Recipe with name: Pasta already exists"));
+
+        mockMvc.perform(post("/api/recipe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "name": "Pasta",
+                                    "instructions": "Kochen, essen",
+                                    "image": "image.jpg",
+                                    "timeMinutes": 20,
+                                    "ingredients": [
+                                        {
+                                            "ingredientId":"1",
+                                            "name":"Tomate",
+                                            "quantity":5,
+                                            "unit":"PIECE",
+                                            "isAnimal":false
+                                        }
+                                     ]
+                                }
+                                """)
+                )
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.errorMessage").value("Recipe with name: Pasta already exists"));
     }
 }

@@ -1,0 +1,43 @@
+@use "../../../styles/variables" as *;
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.input-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  font-size: 1rem;
+  color: $text-main;
+  transition: all 0.2s ease;
+  height: 40px;
+
+  &::placeholder {
+    color: #9ca3af;
+    font-size: 14px;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $accent;
+    box-shadow: 0 0 0 3px $orange-shadow-color;
+  }
+
+  &:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+    color: #9ca3af;
+  }
+}
