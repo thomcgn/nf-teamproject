@@ -1,6 +1,7 @@
 import {useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import type {IngredientOption} from "./types.ts";
+import { useToast } from "../Toast";
 
 type IngredientSelectSimpleProps = {
     value: IngredientOption[];
@@ -23,8 +24,8 @@ export function IngredientSelectSimple({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [creating, setCreating] = useState(false);
-    const [createError, setCreateError] = useState<string | null>(null);
     const [isAnimalDraft, setIsAnimalDraft] = useState(false);
+    const {showToast} = useToast()
 
     const selectedSet = useMemo(() => new Set(value.map(v => v.id)), [value]);
 
@@ -74,7 +75,6 @@ export function IngredientSelectSimple({
 
     const createIngredient = async () => {
         setCreating(true);
-        setCreateError(null);
 
         try {
             const res = await axios.post<IngredientOption>("/api/ingredients", {
@@ -91,12 +91,17 @@ export function IngredientSelectSimple({
             setIsAnimalDraft(false);
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
-                setCreateError(
-                    error.response?.data?.errorMessage || "Failed to add ingredient"
-                );
+                showToast({
+                    type: "error",
+                    message: error.response?.data?.errorMessage || "Failed to add ingredient",
+                });
             } else {
-                setCreateError("Unexpected error occurred");
-            }        } finally {
+                showToast({
+                    type: "error",
+                    message: "Unexpected error occurred",
+                });
+            }
+        } finally {
             setCreating(false);
         }
     };
@@ -148,8 +153,6 @@ export function IngredientSelectSimple({
                         />
                         <span>Contains animal products</span>
                     </label>
-
-                    {createError && <p className="ingredient-picker__error">{createError}</p>}
 
                     <button
                         type="button"
