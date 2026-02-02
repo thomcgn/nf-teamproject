@@ -18,7 +18,6 @@ public class DataInitializer {
         return args -> {
 
             if (ingredientRepository.count() > 0) {
-                System.out.println("Ingredients already seeded.");
                 return;
             }
 
