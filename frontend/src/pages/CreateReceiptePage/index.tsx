@@ -9,11 +9,15 @@ import Input from "../../components/atoms/Input";
 import type {RecipeItemType} from "./types.ts";
 import {isValidImageUrl} from "../../system/utils/indes.tsx";
 import Textarea from "../../components/atoms/TextArea";
+import type {RecipeIngredientLine} from "../../components/organisms/Select/types.ts";
+import {IngredientSelectForRecipe} from "../../components/organisms/Select/IngredientSelectForRecipe.tsx";
 
 export default function CreateRecipePage() {
     const { showToast }  = useToast();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [recipeIngredients, setRecipeIngredients] = useState<RecipeIngredientLine[]>([]);
+
     const [imageValid, setImageValid] = useState(false);
 
     const [name, setName] = useState("");
@@ -44,12 +48,21 @@ export default function CreateRecipePage() {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         setLoading(true)
         e.preventDefault();
+
+        const ingredientsPayload = recipeIngredients.map((l) => ({
+            ingredientId: l.ingredientId,
+            name: l.name,
+            isAnimal: l.isAnimal,
+            unit: l.unit,
+            quantity: l.quantity === "" ? 1 : Number(l.quantity),
+        }));
+
         const dataToSubmit: Omit<RecipeItemType, "id"> = {
             name,
             instructions,
             image,
             timeMinutes,
-            ingredients: []
+            ingredients: ingredientsPayload
         }
         onCreate(dataToSubmit)
     };
@@ -72,6 +85,10 @@ export default function CreateRecipePage() {
                         value={name}
                         onChange={setName}
                         placeholder="e.g. Spaghetti Carbonara"
+                    />
+                    <IngredientSelectForRecipe
+                        value={recipeIngredients}
+                        onChange={setRecipeIngredients}
                     />
                     <Input
                         label={"Time (min):"}
