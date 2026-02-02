@@ -78,7 +78,7 @@ export default function CreateRecipePage() {
                         type={"number"}
                         name={"timeMinutes"}
                         value={timeMinutes}
-                        onChange={setTimeMinutes}
+                        onChange={(value: string) => setTimeMinutes(Number(value))}
                     />
                     <Input
                         label={"Image Url:"}
