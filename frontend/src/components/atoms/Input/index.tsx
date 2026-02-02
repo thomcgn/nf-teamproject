@@ -10,16 +10,6 @@ const Input: React.FC<InputProps> = ({
                                          label,
                                          disabled = false,
                                      }) => {
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = e.target.value;
-
-        if (type === "number") {
-            onChange(rawValue === "" ? "" : Number(rawValue));
-        } else {
-            onChange(rawValue);
-        }
-    };
     return (
         <div className="input-wrapper">
             {label && <label htmlFor={name}  className="input-label">{label}</label>}
@@ -27,7 +17,7 @@ const Input: React.FC<InputProps> = ({
                 name={name}
                 type={type}
                 value={value}
-                onChange={handleChange}
+                onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 disabled={disabled}
                 className="custom-input"
