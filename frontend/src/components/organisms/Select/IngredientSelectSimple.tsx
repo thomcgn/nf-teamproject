@@ -89,9 +89,14 @@ export function IngredientSelectSimple({
             setQuery("");
             setOptions([]);
             setIsAnimalDraft(false);
-        } catch (e: any) {
-            setCreateError(e?.response?.data?.errorMessage || "Failed to add ingredient");
-        } finally {
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                setCreateError(
+                    error.response?.data?.errorMessage || "Failed to add ingredient"
+                );
+            } else {
+                setCreateError("Unexpected error occurred");
+            }        } finally {
             setCreating(false);
         }
     };
