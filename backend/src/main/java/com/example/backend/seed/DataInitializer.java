@@ -69,7 +69,6 @@ public class DataInitializer {
             );
 
             ingredientRepository.saveAll(ingredients);
-            System.out.println("Seeded " + ingredients.size() + " ingredients.");
         };
     }
 }
