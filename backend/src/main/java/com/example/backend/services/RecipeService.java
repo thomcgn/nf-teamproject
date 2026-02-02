@@ -34,13 +34,14 @@ public class RecipeService {
 
     public RecipeResponse addRecipe(RecipeRequest recipeRequest) {
         RecipeRequest normalized = normalizeRecipeRequest(recipeRequest);
-        validateRecipeRequest(normalized);
 
         if (getRecipeByName(normalized.name()).isPresent()) {
             throw new DuplicateItemException(
                     "Recipe with name: " + normalized.name() + " already exists"
             );
         }
+
+        validateRecipeRequest(normalized);
 
         Recipe recipe = recipeRepository.save(
                 new Recipe(
@@ -98,16 +99,16 @@ public class RecipeService {
             throw new ValidationException("Recipe name cannot be empty");
         }
 
-        if (request.instructions() == null || request.instructions().isBlank()) {
-            throw new ValidationException("Instructions cannot be empty");
+        if (request.ingredients() == null || request.ingredients().isEmpty()) {
+            throw new ValidationException("Recipe must contain at least one ingredient");
         }
 
         if (request.timeMinutes() <= 0) {
             throw new ValidationException("Cooking time must be greater than 0");
         }
 
-        if (request.ingredients() == null || request.ingredients().isEmpty()) {
-            throw new ValidationException("Recipe must contain at least one ingredient");
+        if (request.instructions() == null || request.instructions().isBlank()) {
+            throw new ValidationException("Instructions cannot be empty");
         }
     }
 
