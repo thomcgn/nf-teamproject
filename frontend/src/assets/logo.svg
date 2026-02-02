@@ -1,0 +1,27 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Gradient Circle -->
+    <circle cx="64" cy="64" r="64" fill="url(#grad)"/>
+
+    <!-- Cooking Pot -->
+    <rect x="32" y="50" width="64" height="40" rx="8" fill="#fff6ed"/>
+    <rect x="44" y="40" width="40" height="12" rx="6" fill="#fff6ed"/>
+    <line x1="44" y1="40" x2="44" y2="52" stroke="#ffd166" stroke-width="3"/>
+    <line x1="84" y1="40" x2="84" y2="52" stroke="#ffd166" stroke-width="3"/>
+
+    <!-- Spoon & Fork Cross -->
+    <line x1="48" y1="20" x2="80" y2="48" stroke="#ffd166" stroke-width="4" stroke-linecap="round"/>
+    <line x1="80" y1="20" x2="48" y2="48" stroke="#ffd166" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Kitchenly Text -->
+    <text x="64" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-weight="700" font-size="18" fill="#fff6ed">
+        Kitchenly
+    </text>
+
+    <!-- Gradient Definition -->
+    <defs>
+        <linearGradient id="grad" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ff9f63"/>
+            <stop offset="1" stop-color="#ff6f3c"/>
+        </linearGradient>
+    </defs>
+</svg>

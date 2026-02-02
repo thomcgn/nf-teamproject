@@ -13,12 +13,28 @@
   box-shadow: $shadow-soft;
 
   &__logo {
-    font-weight: 900;
-    font-size: 1.8rem;
-    color: $primary;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
     text-decoration: none;
     cursor: pointer;
     padding: 4px;
+
+
+  &-text {
+    color: $primary;
+    font-weight: 900;
+    font-size: 1.8rem;
+  }
+
+
+
+    .logo-svg {
+      width: 40px;
+      height: 40px;
+    }
+
   }
 
   &__nav {
