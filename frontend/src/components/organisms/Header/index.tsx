@@ -18,11 +18,18 @@ export default function Header() {
                     Recipes
                 </NavLink>
                 <NavLink
+                    to={APP_ROUTES.receipts.create}
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                >
+                    Add recipes
+                </NavLink>
+                <NavLink
                     to={APP_ROUTES.ingredients.index}
                     className={({ isActive }) => isActive ? 'active' : ''}
                 >
                     Ingredients
                 </NavLink>
+
                 <NavLink
                     to={APP_ROUTES.about.index}
                     className={({ isActive }) => isActive ? 'active' : ''}

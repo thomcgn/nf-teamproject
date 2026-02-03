@@ -1,5 +1,8 @@
 package com.example.backend.model;
 
+import lombok.Getter;
+
+@Getter
 public enum Unit {
     G("g"),
     KG("kg"),
@@ -24,7 +27,4 @@ public enum Unit {
         this.display = display;
     }
 
-    public String getDisplay() {
-        return display;
-    }
-    }
+}

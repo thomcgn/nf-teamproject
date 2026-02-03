@@ -26,4 +26,13 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
+    @ExceptionHandler(ValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleValidationException(ValidationException e) {
+        return ErrorMessage.builder()
+                .errorCode(HttpStatus.BAD_REQUEST.value())
+                .errorMessage(e.getMessage())
+                .build();
+    }
+
 }
