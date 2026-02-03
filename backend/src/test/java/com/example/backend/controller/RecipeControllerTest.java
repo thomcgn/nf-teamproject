@@ -12,14 +12,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -232,4 +234,23 @@ class RecipeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+
+    @Test
+    void deleteRecipe_shouldReturn404_whenRecipeNotFound()  throws Exception {
+        doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"))
+                .when(recipeService).deleteRecipe("missing");
+
+        mockMvc.perform(delete("/api/recipe/{id}", "missing"))
+                .andExpect(status().isNotFound());
+
+        verify(recipeService).deleteRecipe("missing");
+    }
+
+    @Test
+    void deleteRecipe_shouldReturn204_whenSuccessful()  throws Exception {
+        mockMvc.perform(delete("/api/recipe/{id}", "123"))
+                .andExpect(status().isNoContent());
+
+        verify(recipeService).deleteRecipe("123");
+    }
 }
