@@ -34,12 +34,7 @@ public class RecipeService {
 
     public RecipeResponse addRecipe(RecipeRequest recipeRequest) {
         RecipeRequest normalized = normalizeRecipeRequest(recipeRequest);
-
-        if (getRecipeByName(normalized.name()).isPresent()) {
-            throw new DuplicateItemException(
-                    "Recipe with name: " + normalized.name() + " already exists"
-            );
-        }
+        checkDuplicateName(normalized.name());
 
         validateRecipeRequest(normalized);
 
@@ -65,6 +60,10 @@ public class RecipeService {
                 .orElseThrow(() ->
                         new NotFoundException("Recipe with id: " + id + " not found!")
                 );
+
+        if (!recipeToUpdate.getName().equals(normalized.name())) {
+            checkDuplicateName(normalized.name());
+        }
 
         recipeToUpdate.setName(normalized.name());
         recipeToUpdate.setInstructions(normalized.instructions());
@@ -109,6 +108,12 @@ public class RecipeService {
 
         if (request.instructions() == null || request.instructions().isBlank()) {
             throw new ValidationException("Instructions cannot be empty");
+        }
+    }
+
+    private void checkDuplicateName(String name) {
+        if (getRecipeByName(name).isPresent()) {
+            throw new DuplicateItemException("Recipe with name: " + name + " already exists");
         }
     }
 
