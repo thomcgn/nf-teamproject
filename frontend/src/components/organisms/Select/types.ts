@@ -20,10 +20,15 @@ export type IngredientOption = {
     isAnimal: boolean;
 };
 
-export type RecipeIngredientLine = {
+export type RecipeIngredientType = {
     ingredientId: string;
     name: string;
     isAnimal: boolean;
-    quantity: string;
+    quantity: number;
     unit: Unit;
+};
+
+export type IngredientSelectForRecipeProps = {
+    value: RecipeIngredientType[];
+    onChange: (lines: RecipeIngredientType[]) => void;
 };
