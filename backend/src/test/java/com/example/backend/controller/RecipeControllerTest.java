@@ -5,7 +5,6 @@ import com.example.backend.dto.RecipeRequest;
 import com.example.backend.dto.RecipeResponse;
 import com.example.backend.exceptions.DuplicateItemException;
 import com.example.backend.exceptions.NotFoundException;
-import com.example.backend.model.Recipe;
 import com.example.backend.model.RecipeIngredient;
 import com.example.backend.model.Unit;
 import com.example.backend.services.RecipeService;
@@ -113,7 +112,7 @@ class RecipeControllerTest {
                                             "name":"Tomate",
                                             "quantity":5,
                                             "unit":"PIECE",
-                                            "isAnimal":false
+                                            "animal":false
                                         }
                                      ]
                                 }
@@ -146,7 +145,7 @@ class RecipeControllerTest {
                                             "name":"Tomate",
                                             "quantity":5,
                                             "unit":"PIECE",
-                                            "isAnimal":false
+                                            "animal":false
                                         }
                                      ]
                                 }
@@ -200,7 +199,7 @@ class RecipeControllerTest {
                                     "name": "Tomate",
                                     "quantity": 5,
                                     "unit": "PIECE",
-                                    "isAnimal": false
+                                    "animal": false
                                 }
                             ]
                         }

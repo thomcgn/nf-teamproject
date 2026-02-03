@@ -13,7 +13,7 @@ export function IngredientSelectForRecipe({ value, onChange }: IngredientSelectF
     const baseIngredients: IngredientOption[] = value.map(v => ({
         id: v.ingredientId,
         name: v.name,
-        isAnimal: v.isAnimal,
+        animal: v.animal,
     }));
 
     const handleBaseChange = (ingredients: IngredientOption[]) => {
@@ -22,7 +22,7 @@ export function IngredientSelectForRecipe({ value, onChange }: IngredientSelectF
             return existing ?? {
                 ingredientId: ing.id,
                 name: ing.name,
-                isAnimal: ing.isAnimal ?? false,
+                animal: ing.animal ?? false,
                 quantity: 0,
                 unit: "G",
             };

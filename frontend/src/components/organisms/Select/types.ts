@@ -17,13 +17,13 @@ export type Unit = typeof UNIT_OPTIONS[number]["value"];
 export type IngredientOption = {
     id: string;
     name: string;
-    isAnimal: boolean;
+    animal: boolean;
 };
 
 export type RecipeIngredientType = {
     ingredientId: string;
     name: string;
-    isAnimal: boolean;
+    animal: boolean;
     quantity: number;
     unit: Unit;
 };

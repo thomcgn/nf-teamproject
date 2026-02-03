@@ -14,5 +14,5 @@ public class Ingredient {
     private String id;
     @Indexed(unique = true)
     private String name;
-    private boolean isAnimal;
+    private boolean animal;
 }
