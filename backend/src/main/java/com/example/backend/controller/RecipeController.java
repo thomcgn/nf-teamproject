@@ -33,4 +33,11 @@ public class RecipeController {
     public RecipeResponse addRecipe(@RequestBody RecipeRequest recipeRequest) {
         return recipeService.addRecipe(recipeRequest);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRecipe(@PathVariable String id) {
+        recipeService.deleteRecipe(id);
+    }
+
 }

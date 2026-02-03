@@ -8,9 +8,12 @@ import com.example.backend.model.Recipe;
 import com.example.backend.repositories.RecipeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -48,4 +51,11 @@ public class RecipeService {
 
         return mapper.toRecipeResponse(recipe);
     }
+
+    public void deleteRecipe(String id) {
+        if (!recipeRepository.existsById(id)) {
+            throw new ResponseStatusException(NOT_FOUND, "Recipe not found");
+        }
+        recipeRepository.deleteById(id);
+       }
 }
