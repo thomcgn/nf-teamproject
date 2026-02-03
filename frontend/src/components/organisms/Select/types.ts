@@ -17,13 +17,18 @@ export type Unit = typeof UNIT_OPTIONS[number]["value"];
 export type IngredientOption = {
     id: string;
     name: string;
-    isAnimal: boolean;
+    animal: boolean;
 };
 
-export type RecipeIngredientLine = {
+export type RecipeIngredientType = {
     ingredientId: string;
     name: string;
-    isAnimal: boolean;
-    quantity: string;
+    animal: boolean;
+    quantity: number;
     unit: Unit;
+};
+
+export type IngredientSelectForRecipeProps = {
+    value: RecipeIngredientType[];
+    onChange: (lines: RecipeIngredientType[]) => void;
 };

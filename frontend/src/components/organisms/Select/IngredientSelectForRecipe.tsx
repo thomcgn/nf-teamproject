@@ -1,35 +1,29 @@
-import {type IngredientOption, type Unit, UNIT_OPTIONS} from "./types.ts";
+import {
+    type IngredientOption,
+    type IngredientSelectForRecipeProps,
+    type RecipeIngredientType,
+    type Unit,
+    UNIT_OPTIONS
+} from "./types.ts";
 import {IngredientSelectSimple} from "./IngredientSelectSimple.tsx";
 
-export type RecipeIngredientLine = {
-    ingredientId: string;
-    name: string;
-    isAnimal: boolean;
-    quantity: string; // UI typing
-    unit: Unit;
-};
-
-type IngredientSelectForRecipeProps = {
-    value: RecipeIngredientLine[];
-    onChange: (lines: RecipeIngredientLine[]) => void;
-};
 
 export function IngredientSelectForRecipe({ value, onChange }: IngredientSelectForRecipeProps) {
 
     const baseIngredients: IngredientOption[] = value.map(v => ({
         id: v.ingredientId,
         name: v.name,
-        isAnimal: v.isAnimal,
+        animal: v.animal,
     }));
 
     const handleBaseChange = (ingredients: IngredientOption[]) => {
-        const newLines: RecipeIngredientLine[] = ingredients.map(ing => {
+        const newLines: RecipeIngredientType[] = ingredients.map(ing => {
             const existing = value.find(v => v.ingredientId === ing.id);
             return existing ?? {
                 ingredientId: ing.id,
                 name: ing.name,
-                isAnimal: ing.isAnimal ?? false,
-                quantity: "",
+                animal: ing.animal ?? false,
+                quantity: 0,
                 unit: "G",
             };
         });
@@ -42,7 +36,7 @@ export function IngredientSelectForRecipe({ value, onChange }: IngredientSelectF
         if (qty !== "" && !/^\d+$/.test(qty)) return;
 
         onChange(value.map(v =>
-            v.ingredientId === id ? { ...v, quantity: qty } : v
+            v.ingredientId === id ? { ...v, quantity: Number(qty) } : v
         ));
     };
 
