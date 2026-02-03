@@ -14,33 +14,27 @@ export default function DeleteRecipeButton({
                                            }: DeleteRecipeButtonProps) {
     const {showToast} = useToast();
 
-    const handleDelete = async () => {
+    const handleDelete =  () => {
         const confirmed = window.confirm("Are you sure you want to delete this recipe?");
         if (!confirmed) return;
 
-        try {
-            await axios.delete(`${BASE_API_URL}/${recipeId}`);
-
-            showToast({
-                type: "success",
-                message: "Recipe deleted successfully",
-            });
-            onDeleted?.();
-
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
+        axios
+            .delete(`${BASE_API_URL}/${recipeId}`)
+            .then(() => {
                 showToast({
-                    type: "error",
-                    message: error.response?.data?.errorMessage || "Failed to delete recipe",
+                    type: "success",
+                    message: "Recipe deleted successfully",
                 });
-            } else {
+                onDeleted?.();
+            })
+            .catch((error) => {
                 showToast({
                     type: "error",
-                    message: "Unexpected error occurred",
-                })
-            }
-        }
-
+                    message: axios.isAxiosError(error)
+                        ? error.response?.data?.errorMessage || "Failed to delete recipe"
+                        : "Unexpected error occurred",
+                });
+            });
     };
 
     return (
