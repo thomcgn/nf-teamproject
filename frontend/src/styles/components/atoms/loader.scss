@@ -1,0 +1,36 @@
+.loader {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 40px auto;
+}
+
+.loader__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 22px;
+
+  transform:
+          rotate(calc(var(--i) * 60deg))
+          translate(50px)
+          rotate(calc(var(--i) * -60deg));
+
+  animation: orbit 4s linear infinite;
+}
+
+@keyframes orbit {
+  from {
+    transform:
+            rotate(calc(var(--i) * 60deg))
+            translate(50px)
+            rotate(calc(var(--i) * -60deg));
+  }
+
+  to {
+    transform:
+            rotate(calc(var(--i) * 60deg + 360deg))
+            translate(50px)
+            rotate(calc(var(--i) * -60deg - 360deg));
+  }
+}

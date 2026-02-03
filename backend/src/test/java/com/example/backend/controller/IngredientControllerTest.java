@@ -43,8 +43,8 @@ class IngredientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
-                          { "id": "1", "name": "Tomato", "isAnimal": false },
-                          { "id": "2", "name": "Milk", "isAnimal": true }
+                          { "id": "1", "name": "Tomato", "animal": false },
+                          { "id": "2", "name": "Milk", "animal": true }
                         ]
                         """));
     }
@@ -59,7 +59,7 @@ class IngredientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [
-                          { "id": "1", "name": "Tomato", "isAnimal": false }
+                          { "id": "1", "name": "Tomato", "animal": false }
                         ]
                         """));
     }
@@ -71,12 +71,12 @@ class IngredientControllerTest {
                         .content("""
                             {
                                 "name": "Tofu",
-                                "isAnimal": false
+                                "animal": false
                             }
                         """))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("""
-                        { "name": "Tofu", "isAnimal": false }
+                        { "name": "Tofu", "animal": false }
                         """))
                 .andExpect(jsonPath("$.id").isNotEmpty());
 

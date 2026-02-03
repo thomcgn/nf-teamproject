@@ -79,7 +79,7 @@ export function IngredientSelectSimple({
         try {
             const res = await axios.post<IngredientOption>("/api/ingredients", {
                 name: trimmed,
-                isAnimal: isAnimalDraft,
+                animal: isAnimalDraft,
             });
 
             const created = res.data;

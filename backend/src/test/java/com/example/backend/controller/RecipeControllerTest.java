@@ -1,12 +1,13 @@
 package com.example.backend.controller;
 
 
+import com.example.backend.dto.RecipeRequest;
 import com.example.backend.dto.RecipeResponse;
 import com.example.backend.exceptions.DuplicateItemException;
+import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.model.RecipeIngredient;
 import com.example.backend.model.Unit;
 import com.example.backend.services.RecipeService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RecipeController.class)
@@ -112,7 +112,7 @@ class RecipeControllerTest {
                                             "name":"Tomate",
                                             "quantity":5,
                                             "unit":"PIECE",
-                                            "isAnimal":false
+                                            "animal":false
                                         }
                                      ]
                                 }
@@ -145,7 +145,7 @@ class RecipeControllerTest {
                                             "name":"Tomate",
                                             "quantity":5,
                                             "unit":"PIECE",
-                                            "isAnimal":false
+                                            "animal":false
                                         }
                                      ]
                                 }
@@ -154,4 +154,82 @@ class RecipeControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.errorMessage").value("Recipe with name: Pasta already exists"));
     }
+
+    @Test
+    void updateRecipe_shouldReturnUpdatedRecipe() throws Exception {
+        RecipeIngredient ingredient = new RecipeIngredient(
+                "1",
+                "Tomate",
+                5,
+                Unit.PIECE,
+                false
+        );
+
+        RecipeRequest updateRequest = new RecipeRequest(
+                "Updated Pasta",
+                "Updated instructions",
+                "updated.jpg",
+                25,
+                List.of(ingredient)
+        );
+
+        RecipeResponse updatedRecipe = new RecipeResponse(
+                "1",
+                "Updated Pasta",
+                "Updated instructions",
+                "updated.jpg",
+                25,
+                List.of(ingredient)
+        );
+
+        when(recipeService.updateRecipe("1", updateRequest))
+                .thenReturn(updatedRecipe);
+
+        mockMvc.perform(put("/api/recipe/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                            "name": "Updated Pasta",
+                            "instructions": "Updated instructions",
+                            "image": "updated.jpg",
+                            "timeMinutes": 25,
+                            "ingredients": [
+                                {
+                                    "ingredientId": "1",
+                                    "name": "Tomate",
+                                    "quantity": 5,
+                                    "unit": "PIECE",
+                                    "animal": false
+                                }
+                            ]
+                        }
+                    """)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("Updated Pasta"))
+                .andExpect(jsonPath("$.image").value("updated.jpg"))
+                .andExpect(jsonPath("$.timeMinutes").value(25))
+                .andExpect(jsonPath("$.ingredients[0].name").value("Tomate"));
+    }
+
+    @Test
+    void updateRecipe_shouldReturn404_whenNotFound() throws Exception {
+        when(recipeService.updateRecipe(Mockito.eq("42"), Mockito.any()))
+                .thenThrow(new NotFoundException("Recipe with id: 42 not found"));
+
+        mockMvc.perform(put("/api/recipe/42")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                            "name": "Pasta",
+                            "instructions": "Kochen",
+                            "timeMinutes": 20,
+                            "ingredients": []
+                        }
+                    """)
+                )
+                .andExpect(status().isNotFound());
+    }
+
 }

@@ -12,5 +12,5 @@ public class RecipeIngredient {
     private String name;
     private Integer quantity;
     private Unit unit;
-    private boolean isAnimal;
+    private boolean animal;
 }

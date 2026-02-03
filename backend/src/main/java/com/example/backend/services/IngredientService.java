@@ -29,7 +29,7 @@ public class IngredientService {
 
         Ingredient ingredient = new Ingredient();
         ingredient.setName(normalized);
-        ingredient.setAnimal(request.isAnimal());
+        ingredient.setAnimal(request.animal());
 
         Ingredient saved = repo.save(ingredient);
         return toResponse(saved);
