@@ -1,0 +1,29 @@
+@use '../../../styles/variables' as *;
+
+.login-button {
+  background-color: $primary;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: $secondary;
+}
+
+.logout-button {
+  background-color: $primary;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: $secondary;
+}

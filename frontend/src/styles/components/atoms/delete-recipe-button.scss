@@ -1,0 +1,13 @@
+.btn-danger {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #d33;
+  transition: 0.2s;
+
+  &:hover {
+    color: #a00;
+    transform: scale(1.1);
+  }
+}

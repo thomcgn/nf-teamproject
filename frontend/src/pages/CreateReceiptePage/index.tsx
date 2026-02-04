@@ -1,25 +1,18 @@
-import {type FormEvent, useEffect, useState} from "react";
+import {useState} from "react";
 import Card from "../../components/molecules/Card";
 import {useToast} from "../../components/organisms/Toast";
 import axios from "axios";
 import {BASE_API_URL} from "../../system/api/constants.ts";
 import {useNavigate} from "react-router-dom";
 import {APP_ROUTES} from "../../system/router/constants.ts";
-import Input from "../../components/atoms/Input";
 import type {RecipeItemType} from "./types.ts";
-import {isValidImageUrl} from "../../system/utils/indes.tsx";
-import Textarea from "../../components/atoms/TextArea";
+import CreateUpdateRecipeForm from "../../components/organisms/CreateUpdateRecipeForm";
+import Loader from "../../components/atoms/Loader";
 
 export default function CreateRecipePage() {
     const { showToast }  = useToast();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [imageValid, setImageValid] = useState(false);
-
-    const [name, setName] = useState("");
-    const [timeMinutes, setTimeMinutes] = useState(0);
-    const [image, setImage] = useState("");
-    const [instructions, setInstructions] = useState("");
 
     const onCreate = (data: Omit<RecipeItemType, "id">) => {
         axios.post(BASE_API_URL, data)
@@ -38,73 +31,27 @@ export default function CreateRecipePage() {
                 })
             })
             .finally(() => setLoading(false))
-
     }
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const onSubmit = (data: RecipeItemType) => {
         setLoading(true)
-        e.preventDefault();
-        const dataToSubmit: Omit<RecipeItemType, "id"> = {
-            name,
-            instructions,
-            image,
-            timeMinutes,
-            ingredients: []
-        }
-        onCreate(dataToSubmit)
-    };
-
-    useEffect(() => {
-        isValidImageUrl(image).then((isValid) => {
-            setImageValid(isValid);
-        });
-    }, [image]);
+        onCreate(data);
+    }
 
     return (
         <Card title={"Create New Recipe"}>
             <div className={"create-recipe-page"}>
+                {
+                    loading
+                        ? (<Loader />)
+                        : (
+                            <CreateUpdateRecipeForm
+                                onSubmit={onSubmit}
+                                submitLabel="Create Recipe"
+                            />
+                        )
+                }
 
-                <form onSubmit={handleSubmit}>
-
-                    <Input
-                        name={"name"}
-                        label={"Recipe Name:"}
-                        value={name}
-                        onChange={setName}
-                        placeholder="e.g. Spaghetti Carbonara"
-                    />
-                    <Input
-                        label={"Time (min):"}
-                        type={"number"}
-                        name={"timeMinutes"}
-                        value={timeMinutes}
-                        onChange={setTimeMinutes}
-                    />
-                    <Input
-                        label={"Image Url:"}
-                        name={"image"}
-                        value={image}
-                        placeholder="https://..."
-                        onChange={setImage}
-                    />
-                    {imageValid && (
-                        <div className="image-preview">
-                            <img src={image} alt="Recipe preview" />
-                        </div>
-                    )}
-
-                    <Textarea
-                        name="instructions"
-                        label="Instructions"
-                        value={instructions}
-                        onChange={setInstructions}
-                        placeholder="Step by step instructions..."
-                    />
-
-                    <button className="btn btn-primary" type="submit" disabled={loading}>
-                        {loading ? "Saving..." : "Save Recipe"}
-                    </button>
-                </form>
             </div>
         </Card>
 
