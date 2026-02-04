@@ -41,7 +41,7 @@ class RecipeControllerTest {
 
     @Test
     void getAllRecipes_shouldReturnRecipes() throws Exception {
-        RecipeIngredient ingredient = new RecipeIngredient("1", "Tomate",5, Unit.PIECE,false);
+        RecipeIngredient ingredient = new RecipeIngredient("1", "Tomate", 5, Unit.PIECE, false);
 
         RecipeResponse recipe = new RecipeResponse(
                 "1",
@@ -107,24 +107,24 @@ class RecipeControllerTest {
         when(recipeService.addRecipe(Mockito.any())).thenReturn(recipe);
 
         mockMvc.perform(post("/api/recipe")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("""
-                                {
-                                    "name": "Pasta",
-                                    "instructions": "Kochen, essen",
-                                    "image": "image.jpg",
-                                    "timeMinutes": 20,
-                                    "ingredients": [
-                                        {
-                                            "ingredientId":"1",
-                                            "name":"Tomate",
-                                            "quantity":5,
-                                            "unit":"PIECE",
-                                            "animal":false
-                                        }
-                                     ]
-                                }
-                            """)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                    {
+                                        "name": "Pasta",
+                                        "instructions": "Kochen, essen",
+                                        "image": "image.jpg",
+                                        "timeMinutes": 20,
+                                        "ingredients": [
+                                            {
+                                                "ingredientId":"1",
+                                                "name":"Tomate",
+                                                "quantity":5,
+                                                "unit":"PIECE",
+                                                "animal":false
+                                            }
+                                         ]
+                                    }
+                                """)
                 )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
@@ -137,7 +137,7 @@ class RecipeControllerTest {
     @Test
     @WithMockUser
     void addRecipe_shouldReturn409_whenDuplicate() throws Exception {
-       when(recipeService.addRecipe(Mockito.any()))
+        when(recipeService.addRecipe(Mockito.any()))
                 .thenThrow(new DuplicateItemException("Recipe with name: Pasta already exists"));
 
         mockMvc.perform(post("/api/recipe")
@@ -198,22 +198,22 @@ class RecipeControllerTest {
         mockMvc.perform(put("/api/recipe/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {
-                            "name": "Updated Pasta",
-                            "instructions": "Updated instructions",
-                            "image": "updated.jpg",
-                            "timeMinutes": 25,
-                            "ingredients": [
-                                {
-                                    "ingredientId": "1",
-                                    "name": "Tomate",
-                                    "quantity": 5,
-                                    "unit": "PIECE",
-                                    "animal": false
-                                }
-                            ]
-                        }
-                    """)
+                                    {
+                                        "name": "Updated Pasta",
+                                        "instructions": "Updated instructions",
+                                        "image": "updated.jpg",
+                                        "timeMinutes": 25,
+                                        "ingredients": [
+                                            {
+                                                "ingredientId": "1",
+                                                "name": "Tomate",
+                                                "quantity": 5,
+                                                "unit": "PIECE",
+                                                "animal": false
+                                            }
+                                        ]
+                                    }
+                                """)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
@@ -232,13 +232,13 @@ class RecipeControllerTest {
         mockMvc.perform(put("/api/recipe/42")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {
-                            "name": "Pasta",
-                            "instructions": "Kochen",
-                            "timeMinutes": 20,
-                            "ingredients": []
-                        }
-                    """)
+                                    {
+                                        "name": "Pasta",
+                                        "instructions": "Kochen",
+                                        "timeMinutes": 20,
+                                        "ingredients": []
+                                    }
+                                """)
                 )
                 .andExpect(status().isNotFound());
     }
@@ -246,7 +246,7 @@ class RecipeControllerTest {
 
     @Test
     @WithMockUser
-    void deleteRecipe_shouldReturn404_whenRecipeNotFound()  throws Exception {
+    void deleteRecipe_shouldReturn404_whenRecipeNotFound() throws Exception {
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found"))
                 .when(recipeService).deleteRecipe("missing");
 
@@ -258,7 +258,7 @@ class RecipeControllerTest {
 
     @Test
     @WithMockUser
-    void deleteRecipe_shouldReturn204_whenSuccessful()  throws Exception {
+    void deleteRecipe_shouldReturn204_whenSuccessful() throws Exception {
         mockMvc.perform(delete("/api/recipe/{id}", "123"))
                 .andExpect(status().isNoContent());
 
