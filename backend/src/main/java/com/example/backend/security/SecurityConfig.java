@@ -17,18 +17,18 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/auth/me").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/recipe/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/recipe/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/recipe/**").authenticated()
-                        .anyRequest().permitAll())
+                        .requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/recipe", "/api/recipe/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/recipe", "/api/recipe/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/recipe", "/api/recipe/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/ingredients", "/api/ingredients/**").authenticated()
+                        .anyRequest().permitAll()
+                )
                 .oauth2Login(o -> o
-                        .defaultSuccessUrl("http://localhost:5173/recipe"))
+                        .defaultSuccessUrl("http://localhost:5173/recipe", true))
                 .logout(l -> l
-                        .logoutUrl("/api/auth/logout")
                         .logoutSuccessUrl("http://localhost:5173/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
                 );
         return http.build();
     }

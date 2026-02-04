@@ -14,12 +14,12 @@ import java.util.Map;
 public class AuthController {
 
     @GetMapping("/me")
-    public ResponseEntity<?> getMe(@AuthenticationPrincipal OAuth2User user) {
+    public ResponseEntity<String> getMe(@AuthenticationPrincipal OAuth2User user) {
         if (user == null) {
             return ResponseEntity.status(401).body("You are not logged in");
         }
 
         String login = user.getAttribute("login");
-        return ResponseEntity.ok(Map.of("login", login));
+        return ResponseEntity.ok(login);
     }
 }

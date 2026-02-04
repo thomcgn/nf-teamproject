@@ -7,12 +7,15 @@ import com.example.backend.exceptions.DuplicateItemException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.model.RecipeIngredient;
 import com.example.backend.model.Unit;
+import com.example.backend.security.SecurityConfig;
 import com.example.backend.services.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -20,10 +23,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RecipeController.class)
+@Import(SecurityConfig.class)
 class RecipeControllerTest {
 
     @Autowired
@@ -85,6 +90,7 @@ class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void addRecipe_shouldReturnCreatedRecipe() throws Exception {
         RecipeIngredient ingredient = new RecipeIngredient("1", "Tomate", 5, Unit.PIECE, false);
         RecipeResponse recipe = new RecipeResponse(
@@ -127,11 +133,13 @@ class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void addRecipe_shouldReturn409_whenDuplicate() throws Exception {
        when(recipeService.addRecipe(Mockito.any()))
                 .thenThrow(new DuplicateItemException("Recipe with name: Pasta already exists"));
 
         mockMvc.perform(post("/api/recipe")
+                        .with(user("testuser"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -156,6 +164,7 @@ class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateRecipe_shouldReturnUpdatedRecipe() throws Exception {
         RecipeIngredient ingredient = new RecipeIngredient(
                 "1",
@@ -214,6 +223,7 @@ class RecipeControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateRecipe_shouldReturn404_whenNotFound() throws Exception {
         when(recipeService.updateRecipe(Mockito.eq("42"), Mockito.any()))
                 .thenThrow(new NotFoundException("Recipe with id: 42 not found"));

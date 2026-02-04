@@ -18,12 +18,8 @@ export default function LogoutButton() {
     };
 
     const logout = () => {
-        axios
-            .post("/api/auth/logout")
-            .then(() => {
-                setUser(null);
-                window.location.href = "/";
-            });
+        const host:string = window.location.host === "localhost:5173" ? "http://localhost:8080" : window.location.origin;
+        window.open(host + "/logout", "_self");
     };
 
     useEffect(() => {

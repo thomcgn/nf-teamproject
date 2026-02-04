@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-type MeResponse = { login: string };
+import type {MeResponse} from "./MeResponse.ts";
 
 export function useAuthUser(): { user: MeResponse | null } {
     const [user, setUser] = useState<MeResponse | null>(null);
