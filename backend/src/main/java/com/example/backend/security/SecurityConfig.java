@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(o -> o
-                        .defaultSuccessUrl(frontendUrl + "/recipe", true))
+                        .defaultSuccessUrl(frontendUrl + "/recipes", true))
                 .logout(l -> l
                         .logoutSuccessUrl(frontendUrl + "/")
                 );
