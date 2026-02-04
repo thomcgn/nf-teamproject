@@ -86,6 +86,7 @@
 
 
     <build>
+        <finalName>app</finalName>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
