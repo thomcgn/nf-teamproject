@@ -8,24 +8,29 @@ import AboutPage from "./pages/AboutPage";
 import {ToastProvider} from "./components/organisms/Toast/context.tsx";
 import CreateRecipePage from "./pages/CreateReceiptePage";
 import UpdateRecipePage from "./pages/UpdateReceiptePage";
+import ProtectedRoute from "./components/atoms/Auth/ProtectedRoute.tsx";
+import {useAuthUser} from "./components/atoms/Auth/UseAuthUser.tsx";
 import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 
 function App() {
-  return (
-      <ToastProvider>
-          <MainLayout >
-              <Routes>
-                  <Route path={APP_ROUTES.index} element={<MainPage/>}/>
-                  <Route path={APP_ROUTES.receipts.create} element={<CreateRecipePage/>}/>
-                  <Route path="/recipe/:id" element={<RecipeDetailsPage/>} />
-                  <Route path={APP_ROUTES.receipts.update} element={<UpdateRecipePage/>}/>
-                  <Route path={APP_ROUTES.about.index} element={<AboutPage/>}/>
-                  {/* MUST be last */}
-                  <Route path="*" element={<NotFound />} />
-              </Routes>
-          </MainLayout>
-      </ToastProvider>
-  )
+    const { user } = useAuthUser();
+    return (
+        <ToastProvider>
+            <MainLayout>
+                <Routes>
+                    <Route path={APP_ROUTES.index} element={<MainPage/>}/>
+                    <Route path="/recipe/:id" element={<RecipeDetailsPage/>} />
+                    <Route element={<ProtectedRoute user={user}/>}>
+                        <Route path={APP_ROUTES.receipts.create} element={<CreateRecipePage/>}/>
+                        <Route path={APP_ROUTES.receipts.update} element={<UpdateRecipePage/>}/>
+                    </Route>
+                    <Route path={APP_ROUTES.about.index} element={<AboutPage/>}/>
+                    {/* MUST be last */}
+                    <Route path="*" element={<NotFound/>}/>
+                </Routes>
+            </MainLayout>
+        </ToastProvider>
+    )
 }
 
 export default App
