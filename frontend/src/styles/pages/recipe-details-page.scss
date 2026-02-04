@@ -1,0 +1,102 @@
+@use "../variables" as *;
+@use "../animations";
+.recipe-details-page {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+
+  .details__topbar {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .details__actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .image-preview {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: $shadow-soft;
+    max-height: 280px;
+    animation: fadeInUp 0.6s ease forwards;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+  }
+
+  .details__meta {
+    width: 100%;
+    max-width: 600px;
+    opacity: 0.85;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  /* 🔥 changed section style */
+  .details__section {
+    width: 100%;
+    max-width: 600px;
+    padding: 0.5rem 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* 🔥 left aligned titles */
+  .details__section-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  .details__text {
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .details__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .details__list-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .details__list-name {
+    font-weight: 400;
+  }
+
+  .details__list-qty {
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+}

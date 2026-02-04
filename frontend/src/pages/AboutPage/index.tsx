@@ -1,10 +1,8 @@
 import Card from "../../components/molecules/Card";
-import {Link} from "react-router-dom";
 
 export default function AboutPage() {
     return (
         <Card title={"About Kitchenly"}>
-            <Link to={`/recipe/698239f0cc105d18d6872b0b`}>Test recipe</Link>
             <p className="about__text">
                 Kitchenly is your cozy companion for discovering delicious recipes tailored to your taste.
                 Whether you’re vegan, meat lover, or dessert enthusiast, we help you cook smarter and eat better.
