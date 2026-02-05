@@ -11,7 +11,7 @@ import java.util.List;
 
 @Profile("!test")
 @Configuration
-public class DataInitializer {
+public class IngredientSeeder {
 
     @Bean
     CommandLineRunner seedIngredients(IngredientRepository ingredientRepository) {
