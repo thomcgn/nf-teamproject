@@ -20,8 +20,8 @@
   }
 
   &__header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 80px auto 80px;
     align-items: center;
     margin-bottom: 1rem;
     gap: 1rem;

@@ -1,0 +1,95 @@
+@use "../../../styles/variables" as *;
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.25s ease;
+  z-index: 40;
+
+  &.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.filter-drawer {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 320px;
+  height: 100%;
+  backdrop-filter: blur(18px);
+  box-shadow: $shadow-soft;
+  transform: translateX(-100%);
+  transition: 0.3s ease;
+  z-index: 50;
+
+  display: flex;
+  flex-direction: column;
+
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+.drawer__header {
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  h2 {
+    margin: 0;
+    font-weight: 800;
+  }
+}
+
+.drawer__content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  height: calc(100vh - 210px);
+}
+
+.drawer__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.drawer__ingredients {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: scroll;
+
+  h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}
+
+.drawer__ingredient {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  cursor: pointer;
+}
+
+.drawer__footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  height: 60px;
+}
