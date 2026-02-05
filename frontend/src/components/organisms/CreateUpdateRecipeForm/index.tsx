@@ -4,12 +4,15 @@ import Input from "../../atoms/Input";
 import {IngredientSelectForRecipe} from "../Select/IngredientSelectForRecipe.tsx";
 import Textarea from "../../atoms/TextArea";
 import type {RecipeIngredientType} from "../Select/types.ts";
-import {isValidImageUrl} from "../../../system/utils/indes.tsx";
+import {isValidImageUrl} from "../../../system/utils";
+import Button from "../../atoms/Button";
+import Loader from "../../atoms/Loader";
 
 export default function CreateUpdateRecipeForm({
    initialValues,
    onSubmit,
    submitLabel,
+    loading
 }: CreateUpdateRecipeFormProps) {
     const [name, setName] = useState(initialValues?.name || "");
     const [timeMinutes, setTimeMinutes] = useState(initialValues?.timeMinutes || 0);
@@ -39,6 +42,10 @@ export default function CreateUpdateRecipeForm({
         });
     };
 
+    if(loading) {
+        return <Loader />
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             <Input
@@ -56,8 +63,9 @@ export default function CreateUpdateRecipeForm({
                 label={"Time (min):"}
                 type={"number"}
                 name={"timeMinutes"}
-                value={timeMinutes}
+                value={timeMinutes === 0 ? "" : timeMinutes}
                 onChange={(value: string) => setTimeMinutes(Number(value))}
+                placeholder="e.g. 15"
             />
             <Input
                 label={"Image Url:"}
@@ -79,10 +87,7 @@ export default function CreateUpdateRecipeForm({
                 onChange={setInstructions}
                 placeholder="Step by step instructions..."
             />
-
-            <button className="btn btn-primary" type="submit">
-                {submitLabel}
-            </button>
+            <Button type={'submit'} className={"btn-primary"} text={submitLabel}/>
         </form>
     );
 }

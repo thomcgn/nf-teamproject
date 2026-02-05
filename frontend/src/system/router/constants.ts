@@ -1,14 +1,19 @@
 export const APP_ROUTES = {
     index: "/",
     receipts: {
-        index: "/receipts",
-        create: "/receipts/create",
-        update: "/receipts/update/:id",
+        index: "/recipes",
+        create: "/recipes/create",
+        update: "/recipes/update/:id",
+        details: "/recipe/:id"
     },
     ingredients: {
         index: "/ingredients"
     },
     about: {
         index: "/about"
+    },
+    favorites: {
+        index: "/favorites"
     }
+
 }

@@ -1,0 +1,102 @@
+@use "../../../styles/variables" as *;
+
+.recipe-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-soft;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: $shadow-soft;
+
+    img {
+      transform: scale(1.05);
+    }
+  }
+
+  &__image {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .favorite {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.45);
+      font-size: 1.1rem;
+      transition: transform 1s ease, background 0.3s ease;
+
+      &:hover {
+        transform: scale(1.15);
+      }
+
+      &.active {
+        transform: scale(1.2);
+        background: $accent;
+        box-shadow: 0 0 12px $accent;
+      }
+    }
+  }
+
+  &__body {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    //height: 100%;
+    flex: 1;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+    }
+  }
+
+  .ingredients-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+
+  .instructions-preview {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: $text-main;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+
+    .admin-actions {
+      display: flex;
+      gap: 0.4rem;
+    }
+  }
+}

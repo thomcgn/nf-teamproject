@@ -19,13 +19,20 @@
     position: relative;
   }
 
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+
   &__title {
     font-size: 2.5rem;
     font-weight: 900;
     background: $gradient-main;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
     animation: fadeInUp 1s ease forwards;
   }
 }
