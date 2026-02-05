@@ -40,7 +40,7 @@ class RecipeControllerTest {
     private RecipeService recipeService;
 
     @Test
-    void getAllRecipes_shouldReturnRecipes() throws Exception {
+    void getAllRecipes_shouldReturnAllRecipes_whenCalledWithoutFilters() throws Exception {
         RecipeIngredient ingredient = new RecipeIngredient("1", "Tomate", 5, Unit.PIECE, false);
 
         RecipeResponse recipe = new RecipeResponse(
@@ -52,7 +52,7 @@ class RecipeControllerTest {
                 List.of(ingredient)
         );
 
-        when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
+        when(recipeService.getAllRecipes(null, null)).thenReturn(List.of(recipe));
 
         mockMvc.perform(get("/api/recipe"))
                 .andExpect(status().isOk())
@@ -61,6 +61,40 @@ class RecipeControllerTest {
                 .andExpect(jsonPath("$[0].name").value("Pasta"))
                 .andExpect(jsonPath("$[0].timeMinutes").value(20))
                 .andExpect(jsonPath("$[0].ingredients[0].name").value("Tomate"));
+    }
+
+    @Test
+    void getRecipes_shouldReturnFilteredRecipes_whenCalledWithFilters() throws Exception {
+        List<RecipeIngredient> ingredients = List.of(
+                new RecipeIngredient("ing1", "Tomato", 200, Unit.G, false),
+                new RecipeIngredient("ing2", "Garlic", 2, Unit.CLOVE, false)
+        );
+
+        RecipeResponse response = new RecipeResponse(
+                "r1",
+                "Pasta with Tomato",
+                "Cook pasta...",
+                "https://example.com/img.jpg",
+                15,
+                ingredients
+        );
+
+        when(recipeService.getAllRecipes("pasta", List.of("ing1", "ing2")))
+                .thenReturn(List.of(response));
+
+        mockMvc.perform(
+                        get("/api/recipe")
+                                .param("name", "pasta")
+                                .param("ingredientIds", "ing1", "ing2")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("r1"))
+                .andExpect(jsonPath("$[0].name").value("Pasta with Tomato"))
+                .andExpect(jsonPath("$[0].ingredients.length()").value(2))
+                .andExpect(jsonPath("$[0].ingredients[0].ingredientId").value("ing1"));
+
+        verify(recipeService).getAllRecipes("pasta", List.of("ing1", "ing2"));
+        verifyNoMoreInteractions(recipeService);
     }
 
     @Test

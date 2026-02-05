@@ -24,9 +24,29 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeMapper mapper;
 
-    public List<RecipeResponse> getAllRecipes() {
-        return recipeRepository.findAll().stream().map(mapper::toRecipeResponse).toList();
+    public List<RecipeResponse> getAllRecipes(String name, List<String> ingredientIds) {
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasIngredients = ingredientIds != null && !ingredientIds.isEmpty();
+
+        List<Recipe> recipes;
+
+        if (hasName && hasIngredients) {
+            String nameRegex = ".*" + name + ".*";
+            recipes = recipeRepository.findByNameAndIngredientIdsAll(nameRegex, ingredientIds);
+
+        } else if (hasName) {
+            recipes = recipeRepository.findByNameContainsIgnoreCase(name);
+
+        } else if (hasIngredients) {
+            recipes = recipeRepository.findByIngredientIdsAll(ingredientIds);
+
+        } else {
+            recipes = recipeRepository.findAll();
+        }
+
+        return recipes.stream().map(mapper::toRecipeResponse).toList();
     }
+
     public Optional<RecipeResponse> getRecipeById(String id) {
         return recipeRepository.findById(id).map(mapper::toRecipeResponse);
     }
