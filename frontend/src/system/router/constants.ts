@@ -4,6 +4,7 @@ export const APP_ROUTES = {
         index: "/recipes",
         create: "/recipes/create",
         update: "/recipes/update/:id",
+        details: "/recipe/:id"
     },
     ingredients: {
         index: "/ingredients"

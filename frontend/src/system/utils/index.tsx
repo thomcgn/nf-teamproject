@@ -34,3 +34,16 @@ export const toggleFavorite = (id: string): string[] => {
     return updated;
 };
 
+export const removeFavorite = (id: string): string[] => {
+    const favorites = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]") as string[];
+
+    const updated = favorites.filter((f) => f !== id);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+
+    // Trigger event so UI can update
+    window.dispatchEvent(new Event("favorites-changed"));
+
+    return updated;
+};
+

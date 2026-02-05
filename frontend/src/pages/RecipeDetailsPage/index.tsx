@@ -4,26 +4,30 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import Card from "../../components/molecules/Card";
 import {formatUnit, type RecipeResponse} from "./types.ts";
 import Loader from "../../components/atoms/Loader";
-import DeleteRecipeButton from "../../components/atoms/DeleteRecipeButton.tsx";
 import {APP_ROUTES} from "../../system/router/constants.ts";
 import {BASE_API_URL} from "../../system/api/constants.ts";
 import {useToast} from "../../components/organisms/Toast";
 import NotFound from "../NotFound";
 import {MdOutlineTimer} from "react-icons/md";
+import {useApiHelpers} from "../../system/api/helperHooks.ts";
+import ModalDelete from "../../components/organisms/ModalDelete";
+import {FaTrash} from "react-icons/fa";
+import Button from "../../components/atoms/Button";
+import {useAuthUser} from "../../components/atoms/Auth/UseAuthUser.tsx";
 
 export default function RecipeDetailsPage() {
     const {id} = useParams();
     const {showToast} = useToast();
     const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
     const [loading, setLoading] = useState(true);
+    const { onDelete } = useApiHelpers(setLoading)
     const [notFound, setNotFound] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
+    const { user } = useAuthUser();
 
     useEffect(() => {
         if (!id) return;
-
-        setLoading(true);
-
         axios
             .get<RecipeResponse>(`${BASE_API_URL}/${id}`)
             .then((res) => {
@@ -41,14 +45,26 @@ export default function RecipeDetailsPage() {
                 setRecipe(null);
             })
             .finally(() => setLoading(false));
-    }, [id]);
+    }, []);
 
     if (notFound) {
         return <NotFound/>;
     }
 
     return (
-        <Card title={recipe?.name ?? "Recipe Details"}>
+        <Card
+            title={recipe?.name ?? "Recipe Details"}
+            backButtonTo={APP_ROUTES.receipts.index}
+            extra={user && (
+                <Button
+                    icon={<FaTrash />}
+                    className="btn-danger"
+                    onlyIcon
+                    onClick={() => setModalOpen(true)}
+                />
+            )
+        }
+        >
             <div className="recipe-details-page">
                 {loading && <Loader/>}
 
@@ -63,56 +79,62 @@ export default function RecipeDetailsPage() {
 
                 {recipe && (
                     <>
-                        <div className="details__topbar">
-                            <Link to={APP_ROUTES.receipts.index} className="btn btn--ghost">
-                                ←
-                            </Link>
-
-                            <div className="details__actions">
-                                <DeleteRecipeButton recipeId={recipe.id}
-                                                    onDeleted={() => navigate(APP_ROUTES.receipts.index)}/>
+                        <div className="details__wide">
+                            <div className="details__image">
+                                <img src={recipe.image} alt={recipe.name} />
                             </div>
+
+                            {recipe.ingredients?.length > 0 && (
+                                <div className="details__ingredients">
+                                    <h2>Ingredients</h2>
+                                    <ul>
+                                        {recipe.ingredients.map((ing) => {
+                                            const unit = formatUnit(ing.unit);
+                                            const qty = ing.quantity ?? "";
+                                            const spacer = qty && unit ? " " : "";
+                                            return (
+                                                <li key={ing.ingredientId}>
+                                                    <span>{ing.name}</span>
+                                                    <span>
+                        {qty}
+                                                        {spacer}
+                                                        {unit}
+                      </span>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
-
-                        <div className="image-preview">
-                            <img src={recipe.image} alt={recipe.name}/>
-                        </div>
-
-                        {recipe.timeMinutes != null && (
-                            <p className="details__meta"><MdOutlineTimer/>{recipe.timeMinutes} min</p>
-                        )}
-
-                        {recipe.ingredients?.length > 0 && (
-                            <div className="details__section">
-                                <h2 className="details__section-title">Ingredients</h2>
-                                <ul className="details__list">
-                                    {recipe.ingredients.map((ing) => {
-                                        const unit = formatUnit(ing.unit);
-                                        const qty = ing.quantity ?? "";
-                                        const spacer = qty && unit ? " " : "";
-
-                                        return (
-                                            <li key={ing.ingredientId} className="details__list-item">
-                                                <span className="details__list-name">{ing.name}</span>
-                                                <span className="details__list-qty">{qty} {spacer} {unit}</span>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </div>
-                        )}
 
                         {recipe.instructions?.trim() && (
-                            <div className="details__section">
-                                <h2 className="details__section-title">Instructions</h2>
-                                <p className="details__text" style={{whiteSpace: "pre-wrap"}}>
-                                    {recipe.instructions}
-                                </p>
+                            <div className="details__instructions">
+                                <h2>Instructions</h2>
+                                <p style={{ whiteSpace: "pre-wrap" }}>{recipe.instructions}</p>
                             </div>
+                        )}
+
+                        {/* TIME META */}
+                        {recipe.timeMinutes != null && (
+                            <p className="details__meta">
+                                <MdOutlineTimer /> {recipe.timeMinutes} min
+                            </p>
                         )}
                     </>
                 )}
             </div>
+            {recipe && (
+                <ModalDelete
+                    isOpen={modalOpen}
+                    itemName={recipe?.name}
+                    onClose={() => setModalOpen(false)}
+                    onConfirm={() => {
+                        onDelete(recipe.id, () => navigate(APP_ROUTES.receipts.index));
+                        setModalOpen(false);
+                    }}
+                />
+            )}
         </Card>
     );
 

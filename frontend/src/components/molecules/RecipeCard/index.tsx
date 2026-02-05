@@ -4,13 +4,21 @@ import {FaEdit, FaEye, FaTrash} from "react-icons/fa";
 import {generatePath, useNavigate} from "react-router-dom";
 import {APP_ROUTES} from "../../../system/router/constants.ts";
 import type {RecipeCardProps} from "./types.ts";
+import {useState} from "react";
+import ModalDelete from "../../organisms/ModalDelete";
 
 export default function RecipeCard({ recipe, onDelete, isLoginedUser }: RecipeCardProps) {
     const navigate = useNavigate();
     const { favorite, ref, toggle } = useFlyToFavorites(recipe.id);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const onEdit = () => {
         const link = generatePath(APP_ROUTES.receipts.update, { id: recipe.id})
+        navigate(link)
+    }
+
+    const onReadMore = () => {
+        const link = generatePath(APP_ROUTES.receipts.details, { id: recipe.id})
         navigate(link)
     }
 
@@ -49,7 +57,6 @@ export default function RecipeCard({ recipe, onDelete, isLoginedUser }: RecipeCa
                 )}
 
                 <p className="instructions-preview">
-                    {/*{recipe.instructions.slice(0, 120)}…*/}
                     {recipe.instructions}
                 </p>
 
@@ -59,7 +66,7 @@ export default function RecipeCard({ recipe, onDelete, isLoginedUser }: RecipeCa
                             icon={<FaEye />}
                             text="Read More"
                             className="btn-outline"
-                            onClick={() => console.log("Read more clicked")}
+                            onClick={onReadMore}
                         />
                         {isLoginedUser && (
                             <div className="admin-actions">
@@ -73,13 +80,22 @@ export default function RecipeCard({ recipe, onDelete, isLoginedUser }: RecipeCa
                                     icon={<FaTrash />}
                                     className="btn-danger"
                                     onlyIcon
-                                    onClick={() => onDelete(recipe.id)}
+                                    onClick={() => setModalOpen(true)}
                                 />
                             </div>
                         )}
                     </div>
 
             </div>
+            <ModalDelete
+                isOpen={modalOpen}
+                itemName={recipe?.name}
+                onClose={() => setModalOpen(false)}
+                onConfirm={() => {
+                    onDelete(recipe.id);
+                    setModalOpen(false);
+                }}
+            />
         </article>
     );
 }

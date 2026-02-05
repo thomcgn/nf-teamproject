@@ -45,6 +45,12 @@ export default function FavoritesPage({ user }: { user: MeResponse | null}) {
         return favoriteRecipes.slice(start, start + PAGE_SIZE);
     }, [favoriteRecipes, page]);
 
+    const handleDelete = (id: string) => {
+        onDelete(id, () => {
+            setRecipes((prev) => prev.filter((r) => r.id !== id));
+        });
+    };
+
     return (
         <Card title={favoriteRecipes.length > 0 ? "Your Favorites ⭐" : "No favorites yet"}>
             {loading
@@ -56,7 +62,7 @@ export default function FavoritesPage({ user }: { user: MeResponse | null}) {
                                 <RecipeCard
                                     key={recipe.id}
                                     recipe={recipe}
-                                    onDelete={onDelete}
+                                    onDelete={handleDelete}
                                     isLoginedUser={!!user}
                                 />
                             ))}

@@ -22,7 +22,7 @@ function App() {
                 <Routes>
                     <Route path={APP_ROUTES.index} element={<MainPage/>}/>
                     <Route path={APP_ROUTES.receipts.index} element={<ReceipePage user={user} />} />
-                    <Route path="/recipe/:id" element={<RecipeDetailsPage/>} />
+                    <Route path={APP_ROUTES.receipts.details} element={<RecipeDetailsPage/>} />
 
                     <Route element={<ProtectedRoute user={user}/>}>
                         <Route path={APP_ROUTES.receipts.create} element={<CreateRecipePage/>}/>

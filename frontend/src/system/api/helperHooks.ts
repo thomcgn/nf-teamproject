@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import type {RecipeItemType} from "../../pages/CreateReceiptePage/types.ts";
 import {BASE_API_URL} from "./constants.ts";
 import {APP_ROUTES} from "../router/constants.ts";
+import {removeFavorite} from "../utils";
 
 export const useApiHelpers = (setLoading: Dispatch<SetStateAction<boolean>>) => {
     const { showToast } = useToast();
@@ -50,6 +51,7 @@ export const useApiHelpers = (setLoading: Dispatch<SetStateAction<boolean>>) => 
             .delete(`${BASE_API_URL}/${id}`)
             .then(() => {
                 showToast({ type: "success", message: "Recipe deleted" });
+                removeFavorite(id)
                 onSuccess?.();
             })
             .catch(() => {
