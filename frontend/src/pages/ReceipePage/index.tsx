@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { useToast } from "../../components/organisms/Toast";
 import type { RecipeItemType } from "../CreateReceiptePage/types";
 import RecipeCard from "../../components/molecules/RecipeCard";
 import Loader from "../../components/atoms/Loader";
@@ -9,27 +8,45 @@ import Card from "../../components/molecules/Card";
 import type {MeResponse} from "../../components/atoms/Auth/MeResponse.ts";
 import Pagination from "../../components/molecules/Pagination";
 import {useApiHelpers} from "../../system/api/helperHooks.ts";
+import RecipeFilterDrawer from "../../components/molecules/RecipeSearch";
+import Button from "../../components/atoms/Button";
 
 export const PAGE_SIZE = 4;
 
 export default function RecipePage({ user }: { user: MeResponse | null}) {
-    const { showToast } = useToast();
     const [recipes, setRecipes] = useState<RecipeItemType[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const { onDelete } = useApiHelpers(setLoading);
 
-    useEffect(() => {
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [searchName, setSearchName] = useState("");
+    const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+
+    const toggleIngredient = (id: string) => {
+        setSelectedIngredients((prev) =>
+            prev.includes(id)
+                ? prev.filter((x) => x !== id)
+                : [...prev, id]
+        );
+    };
+
+    const fetchRecipes = () => {
         axios
-            .get<RecipeItemType[]>(BASE_API_URL)
-            .then((res) => setRecipes(res.data))
-            .catch((err) => {
-                showToast({
-                    type: "error",
-                    message: err?.message || "Failed to load recipes",
-                });
+            .get(BASE_API_URL, {
+                params: {
+                    name: searchName || undefined,
+                    ingredientIds: selectedIngredients.length
+                        ? selectedIngredients
+                        : undefined,
+                },
             })
+            .then((res) => setRecipes(res.data))
             .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        fetchRecipes();
     }, []);
 
     const totalPages = Math.ceil(recipes.length / PAGE_SIZE);
@@ -44,8 +61,17 @@ export default function RecipePage({ user }: { user: MeResponse | null}) {
             setRecipes((prev) => prev.filter((r) => r.id !== id));
         });
     };
+
     return (
-        <Card title={"Recipes"}>
+        <>
+        <Card
+            title={"Recipes"}
+            extra={<Button
+                text="Filters"
+                className="btn-primary"
+                onClick={() => setDrawerOpen(true)}
+            />
+        }>
                 {loading
                     ? (<Loader />)
                     : (
@@ -74,6 +100,24 @@ export default function RecipePage({ user }: { user: MeResponse | null}) {
                     )
                 }
         </Card>
-
+        <RecipeFilterDrawer
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            name={searchName}
+            onNameChange={setSearchName}
+            selectedIngredientIds={selectedIngredients}
+            onToggleIngredient={toggleIngredient}
+            onApply={() => {
+                setLoading(true);
+                setPage(1);
+                fetchRecipes()
+            }}
+            onClear={() => {
+                setSearchName("");
+                setSelectedIngredients([]);
+                fetchRecipes();
+            }}
+        />
+    </>
     );
 }
