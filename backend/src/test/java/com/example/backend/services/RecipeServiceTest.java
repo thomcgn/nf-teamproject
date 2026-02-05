@@ -60,6 +60,48 @@ class RecipeServiceTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    void getAllRecipes_bothNameAndIngredients_callsCombinedRepoQuery() {
+        when(recipeRepository.findByNameAndIngredientIdsAll(anyString(), anyList()))
+                .thenReturn(List.of(new Recipe()));
+
+        recipeService.getAllRecipes("pasta", List.of("ing1", "ing2"));
+
+        verify(recipeRepository).findByNameAndIngredientIdsAll(".*pasta.*", List.of("ing1", "ing2"));
+        verifyNoMoreInteractions(recipeRepository);
+    }
+
+    @Test
+    void getAllRecipes_onlyIngredients_callsAllIngredientsQuery() {
+        when(recipeRepository.findByIngredientIdsAll(anyList()))
+                .thenReturn(List.of(new Recipe()));
+
+        recipeService.getAllRecipes(null, List.of("ing1", "ing2"));
+
+        verify(recipeRepository).findByIngredientIdsAll(List.of("ing1", "ing2"));
+        verifyNoMoreInteractions(recipeRepository);
+    }
+
+    @Test
+    void getAllRecipes_onlyName_callsNameContainsQuery() {
+        when(recipeRepository.findByNameContainsIgnoreCase(anyString()))
+                .thenReturn(List.of(new Recipe()));
+
+        recipeService.getAllRecipes("Soup", null);
+
+        verify(recipeRepository).findByNameContainsIgnoreCase("Soup");
+        verifyNoMoreInteractions(recipeRepository);
+    }
+
+    @Test
+    void getAllRecipes_noFilters_callsFindAll() {
+        when(recipeRepository.findAll()).thenReturn(List.of());
+
+        recipeService.getAllRecipes(null, null);
+
+        verify(recipeRepository).findAll();
+        verifyNoMoreInteractions(recipeRepository);
+    }
 
     @Test
     void deleteCharacter_shouldDeleteCharacter_whenSuccessful() {
