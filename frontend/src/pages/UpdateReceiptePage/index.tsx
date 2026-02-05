@@ -37,7 +37,6 @@ export default function UpdateRecipePage() {
         return <NotFound />;
     }
 
-
     return (
         <Card title={"Update Recipe"}>
             <div className={"create-recipe-page"}>

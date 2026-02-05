@@ -12,6 +12,7 @@ import UpdateRecipePage from "./pages/UpdateReceiptePage";
 import ProtectedRoute from "./components/atoms/Auth/ProtectedRoute.tsx";
 import FavoritesPage from "./pages/FavoritesPage";
 import {useAuthUser} from "./components/atoms/Auth/UseAuthUser.tsx";
+import RecipeDetailsPage from "./pages/RecipeDetailsPage";
 
 function App() {
     const { user } = useAuthUser();
@@ -21,6 +22,7 @@ function App() {
                 <Routes>
                     <Route path={APP_ROUTES.index} element={<MainPage/>}/>
                     <Route path={APP_ROUTES.receipts.index} element={<ReceipePage user={user} />} />
+                    <Route path="/recipe/:id" element={<RecipeDetailsPage/>} />
 
                     <Route element={<ProtectedRoute user={user}/>}>
                         <Route path={APP_ROUTES.receipts.create} element={<CreateRecipePage/>}/>
