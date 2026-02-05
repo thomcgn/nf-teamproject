@@ -52,7 +52,7 @@ class RecipeControllerTest {
                 List.of(ingredient)
         );
 
-        when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
+        when(recipeService.getAllRecipes(null, null)).thenReturn(List.of(recipe));
 
         mockMvc.perform(get("/api/recipe"))
                 .andExpect(status().isOk())

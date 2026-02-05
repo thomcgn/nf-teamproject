@@ -15,12 +15,15 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
-    public RecipeController(RecipeService recipeService) {this.recipeService = recipeService;}
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     @GetMapping
-    public List<RecipeResponse> getAllRecipes() {
-        return recipeService.getAllRecipes();
+    public List<RecipeResponse> getAllRecipes(@RequestParam(required = false) String name, @RequestParam(required = false) List<String> ingredientIds) {
+        return recipeService.getAllRecipes(name, ingredientIds);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponse> getRecipeById(@PathVariable String id) {
         return recipeService.getRecipeById(id)
