@@ -39,7 +39,7 @@ export default function UpdateRecipePage() {
                 const data = response.data;
                 showToast({
                     type: "success",
-                    message: `Recipe: ${data.name} update sucessfully`
+                    message: `Recipe: ${data.name} update successfully`
                 })
                 navigate(APP_ROUTES.receipts.index)
             })

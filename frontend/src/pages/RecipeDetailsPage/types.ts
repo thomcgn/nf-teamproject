@@ -1,12 +1,4 @@
-export type UnitDto = string | { display?: string } | null | undefined;
-
-export type Ingredient = {
-    ingredientId: string;
-    name: string;
-    quantity: number | null;
-    unit: UnitDto;
-    animal: boolean;
-};
+import {type RecipeIngredientType, type Unit, UNIT_OPTIONS} from "../../components/organisms/Select/types.ts";
 
 export type RecipeResponse = {
     id: string;
@@ -14,28 +6,15 @@ export type RecipeResponse = {
     instructions: string;
     image: string;
     timeMinutes: number | null;
-    ingredients: Ingredient[];
+    ingredients: RecipeIngredientType[];
 
 };
 
-const UNIT_DISPLAY_MAP: Record<string, string> = {
-    G: "g",
-    KG: "kg",
-    ML: "ml",
-    L: "l",
-    TSP: "tsp",
-    TBSP: "tbsp",
-    CUP: "cup",
-    PIECE: "piece",
-    PINCH: "pinch",
-    SLICE: "slice",
-    CLOVE: "clove",
-    TO_TASTE: "to taste",
-    AS_NEEDED: "as needed",
-};
 
-export function formatUnit(unit: UnitDto): string {
-    if (!unit) return "";
-    if (typeof unit === "string") return UNIT_DISPLAY_MAP[unit] ?? unit.toLowerCase();
-    return unit.display ?? "";
+const UNIT_LABEL_MAP: Record<Unit, string> = Object.fromEntries(
+    UNIT_OPTIONS.map((o) => [o.value, o.label])
+) as Record<Unit, string>;
+
+export function formatUnit(unit: Unit): string {
+    return UNIT_LABEL_MAP[unit];
 }
