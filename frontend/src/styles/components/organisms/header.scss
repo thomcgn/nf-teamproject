@@ -49,6 +49,13 @@
       color: $primary;
       font-weight: 700;
       transition: color $transition-fast;
+      display: flex;
+      align-items: end;
+      height: 40px;
+
+      & .favorites-star{
+        align-self: flex-start;
+      }
 
       &::after {
         content: '';

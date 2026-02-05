@@ -1,8 +1,12 @@
 const items = ['🧁', '🥗', '🍜', '🍱', '🍔', '🍖'];
 
-export default function Loader() {
+type LoaderProps = {
+    overlay?: boolean; // new prop
+};
+
+export default function Loader({ overlay = false }: LoaderProps) {
     return (
-        <div className="loader">
+        <div className={overlay ? "loader loader-overlay" : "loader"}>
             {items.map((item, index) => (
                 <span
                     key={index}

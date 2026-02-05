@@ -10,6 +10,7 @@ import ReceipePage from "./pages/ReceipePage";
 import CreateRecipePage from "./pages/CreateReceiptePage";
 import UpdateRecipePage from "./pages/UpdateReceiptePage";
 import ProtectedRoute from "./components/atoms/Auth/ProtectedRoute.tsx";
+import FavoritesPage from "./pages/FavoritesPage";
 import {useAuthUser} from "./components/atoms/Auth/UseAuthUser.tsx";
 
 function App() {
@@ -19,11 +20,12 @@ function App() {
             <MainLayout>
                 <Routes>
                     <Route path={APP_ROUTES.index} element={<MainPage/>}/>
-                    <Route path={APP_ROUTES.receipts.index} element={<ReceipePage/>}/>
+                    <Route path={APP_ROUTES.receipts.index} element={<ReceipePage user={user} />} />
 
                     <Route element={<ProtectedRoute user={user}/>}>
                         <Route path={APP_ROUTES.receipts.create} element={<CreateRecipePage/>}/>
                         <Route path={APP_ROUTES.receipts.update} element={<UpdateRecipePage/>}/>
+                        <Route path={APP_ROUTES.favorites.index} element={<FavoritesPage user={user} />}/>
                     </Route>
                     <Route path={APP_ROUTES.about.index} element={<AboutPage/>}/>
                     {/* MUST be last */}

@@ -1,17 +1,7 @@
-import {useToast} from "../../components/organisms/Toast";
-import {useEffect} from "react";
+import Card from "../../components/molecules/Card";
 
 const NotFound = () => {
-    const { showToast } = useToast();
-
-    useEffect(() => {
-        showToast({
-            type: "success",
-            message: "Test Toaster, Look How To Use It in Not Found Page"
-        })
-    }, []);
-
-    return ( <p>Page not found</p> )
+    return <Card title={"Page not found"}/>
 };
 
 export default NotFound;

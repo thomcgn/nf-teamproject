@@ -1,84 +1,74 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import { useToast } from "../../components/organisms/Toast";
+import type { RecipeItemType } from "../CreateReceiptePage/types";
+import RecipeCard from "../../components/molecules/RecipeCard";
+import Loader from "../../components/atoms/Loader";
+import {BASE_API_URL} from "../../system/api/constants.ts";
+import Card from "../../components/molecules/Card";
+import type {MeResponse} from "../../components/atoms/Auth/MeResponse.ts";
+import Pagination from "../../components/molecules/Pagination";
+import {useApiHelpers} from "../../system/api/helperHooks.ts";
 
+export const PAGE_SIZE = 4;
 
-interface RecipeIngredient {
-    ingredientId: string;
-    name: string;
-    quantity: number;
-    unit: string;
-    isAnimal: boolean;
-}
-
-
-interface Recipe {
-    id: string;
-    name: string;
-    instructions: string;
-    image: string;
-    timeMinutes: number;
-    ingredients: RecipeIngredient[];
-}
-
-export default function RecipePage() {
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
+export default function RecipePage({ user }: { user: MeResponse | null}) {
+    const { showToast } = useToast();
+    const [recipes, setRecipes] = useState<RecipeItemType[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [page, setPage] = useState(1);
+    const { onDelete } = useApiHelpers(setLoading);
 
     useEffect(() => {
-
-        fetch("http://localhost:8080/api/recipe")
-            .then((res) => {
-                if (!res.ok) throw new Error("Failed to fetch recipes");
-                return res.json();
-            })
-            .then((data:Recipe[]) => {
-                setRecipes(data);
-                setLoading(false);
-            })
+        axios
+            .get<RecipeItemType[]>(BASE_API_URL)
+            .then((res) => setRecipes(res.data))
             .catch((err) => {
-                setError(err.message);
-                setLoading(false);
-            });
+                showToast({
+                    type: "error",
+                    message: err?.message || "Failed to load recipes",
+                });
+            })
+            .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <p>Loading recipes...</p>;
-    if (error) return <p>Error: {error}</p>;
+    const totalPages = Math.ceil(recipes.length / PAGE_SIZE);
+
+    const paginatedRecipes = useMemo(() => {
+        const start = (page - 1) * PAGE_SIZE;
+        return recipes.slice(start, start + PAGE_SIZE);
+    }, [recipes, page]);
 
     return (
-        <div className="recipe">
-            <h1>Recipes</h1>
-            {recipes.length === 0 ? (
-                <p>No recipes found.</p>
-            ) : (
-                <ul>
-                    {recipes.map((recipe) => (
-                        <li key={recipe.id} className="recipe-card">
-                            <h2>{recipe.name}</h2>
-                            {recipe.image && (
-                                <img
-                                    src={recipe.image}
-                                    alt={recipe.name}
-                                    style={{ width: 200, borderRadius: 8 }}
-                                />
+        <Card title={"Recipes"}>
+                {loading
+                    ? (<Loader />)
+                    : (
+                        <div className="recipes-page">
+                            {paginatedRecipes.length === 0 ? (
+                                <p>No recipes found.</p>
+                            ) : (
+                                <div className="recipes-grid">
+                                    {paginatedRecipes.map((recipe) => (
+                                        <RecipeCard
+                                            key={recipe.id}
+                                            recipe={recipe}
+                                            onDelete={onDelete}
+                                            isLoginedUser={!!user}
+                                        />
+                                    ))}
+                                </div>
                             )}
-                            <p><strong>Time:</strong> {recipe.timeMinutes} minutes</p>
+                            <Pagination
+                                page={page}
+                                totalPages={totalPages}
+                                onPrev={() => setPage((p) => p - 1)}
+                                onNext={() => setPage((p) => p + 1)}
+                            />
+                        </div>
+                    )
+                }
+        </Card>
 
-                            <h3>Ingredients:</h3>
-                            <ul>
-                                {recipe.ingredients.map((ingredient, idx) => (
-                                    <li key={idx}>
-                                        {ingredient.quantity} {ingredient.name}
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <h3>Instructions:</h3>
-                            <p>{recipe.instructions}</p>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
     );
-
 }

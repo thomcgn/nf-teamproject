@@ -1,0 +1,75 @@
+@use "../../styles/variables" as *;
+
+.recipes-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  span {
+    color: $text-muted;
+    font-weight: 600;
+  }
+
+  button {
+    padding: 0.6rem 1.2rem;
+    border-radius: $radius-md;
+    border: none;
+    background: $gradient-main;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform $transition-fast, box-shadow $transition-fast;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: $shadow-glow;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: $radius-md;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all $transition-fast;
+
+  &.btn-secondary {
+    background: $accent;
+    color: #3a2416;
+  }
+
+  &.btn-outline {
+    background: transparent;
+    border: 1px solid $accent;
+    color: $accent;
+  }
+
+  &.btn-danger {
+    background: #c0392b;
+    color: white;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
